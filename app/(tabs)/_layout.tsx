@@ -1,34 +1,107 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { View, Text } from "react-native";
+import React from "react";
+import { Tabs } from "expo-router";
+import { Feather } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
+      initialRouteName="index"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        tabBarActiveTintColor: "black",
+        tabBarInactiveTintColor: "#fff",
+        tabBarActiveBackgroundColor: Colors.lightGreen,
+
+        tabBarStyle: {
+          height: 60,
+          width: "85%",
+          borderRadius: 25,
+          position: "absolute",
+          bottom: 20,
+          left: "6%",
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
+        },
+     
+        
+        tabBarItemStyle: {
+          borderRadius: 25,
+          marginHorizontal: 3,
+          marginVertical: 3,
+        },
+
+        tabBarLabelStyle: {
+          display: "none",
+        },
+
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          headerShown: false,
+          tabBarLabel: "Discover",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <View className="flex-row items-center gap-1 ">
+              <Feather name="home" size={focused ? 20 : 24} color={color} />
+              {focused && (
+                <Text
+                  style={{
+                    color: color,
+                    fontFamily: "RalewaySemiBold",
+                    fontSize: 12,
+                  }}
+                >
+                  Discover
+                </Text>
+              )}
+            </View>
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="bookmarks"
         options={{
-          title: 'Explore',
+          headerShown: false,
+          tabBarLabel: "Bookmarks",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <View className="flex-row items-center gap-1">
+              <Feather name="bookmark" size={focused ? 20 : 24} color={color} />
+              {focused && (
+                <Text
+                  style={{
+                    color: color,
+                    fontFamily: "RalewaySemiBold",
+                    fontSize: 12,
+                  }}
+                >
+                  Bookmarks
+                </Text>
+              )}
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          headerShown: false,
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex-row items-center gap-1">
+              <Feather name="user" size={focused ? 20 : 24} color={color} />
+              {focused && (
+                <Text
+                  style={{
+                    color: color,
+                    fontFamily: "RalewaySemiBold",
+                    fontSize: 12,
+                  }}
+                >
+                  Profile
+                </Text>
+              )}
+            </View>
           ),
         }}
       />
