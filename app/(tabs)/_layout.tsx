@@ -52,7 +52,7 @@ export default function TabsLayout() {
                   style={{
                     color: color,
                     fontFamily: "RalewaySemiBold",
-                    fontSize: 12,
+                    fontSize: 14,
                   }}
                 >
                   Discover
@@ -75,7 +75,7 @@ export default function TabsLayout() {
                   style={{
                     color: color,
                     fontFamily: "RalewaySemiBold",
-                    fontSize: 12,
+                    fontSize: 14,
                   }}
                 >
                   Bookmarks
@@ -98,7 +98,7 @@ export default function TabsLayout() {
                   style={{
                     color: color,
                     fontFamily: "RalewaySemiBold",
-                    fontSize: 12,
+                    fontSize: 14,
                   }}
                 >
                   Profile

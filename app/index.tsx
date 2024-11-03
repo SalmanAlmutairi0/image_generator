@@ -1,11 +1,16 @@
-import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 
 export default function LandingScreen() {
-  
   return (
     <ImageBackground
       source={require("../assets/images/astronaut.jpg")}
@@ -24,9 +29,9 @@ export default function LandingScreen() {
         }}
       />
 
-      <SafeAreaView className="flex-1 items-center justify-between ">
+      <SafeAreaView className="flex-1 items-center justify-between mt-6 ">
         <Text
-          className="text-3xl font-bold text-white mt-4"
+          className="text-3xl font-bold text-white mt-6"
           style={{ fontFamily: "RalewaySemiBold" }}
         >
           Cocode
