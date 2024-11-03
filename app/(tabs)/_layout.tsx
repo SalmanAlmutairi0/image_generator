@@ -20,7 +20,8 @@ export default function TabsLayout() {
           position: "absolute",
           bottom: 20,
           left: "6%",
-          backgroundColor: "rgba(255, 255, 255, 0.2)",
+          backgroundColor: "rgba(255, 255, 255, 0.1 )",
+          borderTopColor: "transparent",
         },
      
         
@@ -28,7 +29,9 @@ export default function TabsLayout() {
           borderRadius: 25,
           marginHorizontal: 3,
           marginVertical: 3,
-        },
+          width: 100,
+          height: 54,
+          },
 
         tabBarLabelStyle: {
           display: "none",
