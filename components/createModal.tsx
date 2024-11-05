@@ -32,7 +32,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
   };
   return (
     <Modal animationType="slide" transparent visible={showModal}>
-      <View className=" mt-auto bg-[#191919] w-full rounded-t-3xl p-4">
+      <View className=" mt-auto bg-[#191919] w-full rounded-t-3xl p-4 shadow-2xl shadow-white">
         <View className="flex-row justify-end w-full">
           <Feather
             name="x"
