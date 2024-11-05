@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.image_generator"
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +32,12 @@
       [
         "expo-font",
         {
-          "fonts": ["assets/fonts/Raleway-Medium.ttf", "assets/fonts/Raleway-SemiBold.ttf", "assets/fonts/Raleway-MediumItalic.ttf", "assets/fonts/Raleway-Light.ttf"]
+          "fonts": [
+            "assets/fonts/Raleway-Medium.ttf",
+            "assets/fonts/Raleway-SemiBold.ttf",
+            "assets/fonts/Raleway-MediumItalic.ttf",
+            "assets/fonts/Raleway-Light.ttf"
+          ]
         }
       ]
     ],
