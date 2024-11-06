@@ -13,6 +13,8 @@ import { Feather } from "@expo/vector-icons";
 import { Colors, imageColors } from "@/constants/Colors";
 import FormGroup from "./formGroup";
 import { Images } from "@/constants/Images";
+import { useAuth } from "@clerk/clerk-expo";
+import { router } from "expo-router";
 
 type Props = {
   showModal: boolean;
@@ -20,16 +22,29 @@ type Props = {
 };
 
 export default function CreateModal({ showModal, setShowModal }: Props) {
-  const [selectedImage, setSelectedImage] = useState(-1);
-  const [selectedcolor, setSelectedColor] = useState('');
+  const { isSignedIn } = useAuth();
 
-  const handleSlectedImage = (index: number) => {
-    setSelectedImage(index);
+  const [selectedImage, setSelectedImage] = useState<String>('');
+  const [selectedcolor, setSelectedColor] = useState<String>("");
+  const [prompt, setPrompt] = useState<String>("");
+
+  const handleSlectedImage = (styleName: string) => {
+    setSelectedImage(() => styleName);
   };
 
   const handleSlectedColor = (color: string) => {
-    setSelectedColor(color);
+    setSelectedColor(() => color);
   };
+
+  const handleSubmit = () => {
+    if (!isSignedIn) router.replace("./sign-in");
+    if (!selectedImage || !selectedcolor || !prompt) return;
+
+    console.log("prompt: " + prompt);
+    console.log("selected style: " + selectedImage);
+    console.log("selected color: " + selectedcolor);
+  };
+
   return (
     <Modal animationType="slide" transparent visible={showModal}>
       <View className=" mt-auto bg-[#191919] w-full rounded-t-3xl p-4 shadow-2xl shadow-white">
@@ -53,6 +68,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
               multiline={true}
               numberOfLines={4}
               textAlignVertical="top"
+              onChangeText={(prompt) => setPrompt(prompt)}
             />
           </FormGroup>
 
@@ -67,13 +83,13 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
                 <TouchableOpacity
                   className="items-center gap-1 "
                   key={index}
-                  onPress={() => handleSlectedImage(index)}
+                  onPress={() => handleSlectedImage(item.name)}
                 >
                   <Image
                     source={item.imagePath}
                     className={
                       `w-28 h-28 rounded-md` +
-                      (selectedImage === index ? " border-4 border-white" : "")
+                      (selectedImage === item.name ? " border-4 border-white" : "")
                     }
                   />
                   <Text className="text-white text-lg">{item.name}</Text>
@@ -95,11 +111,12 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
                   onPress={() => handleSlectedColor(item.hex)}
                 >
                   <View
-                    className={`w-16 h-16 rounded-md` + (
-                      selectedcolor === item.hex
+                    className={
+                      `w-16 h-16 rounded-md` +
+                      (selectedcolor === item.hex
                         ? " border-4 border-white"
-                        : ""
-                    )}
+                        : "")
+                    }
                     style={{ backgroundColor: item.hex }}
                   />
                 </TouchableOpacity>
@@ -113,6 +130,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
             style={{
               backgroundColor: Colors.lightGreen,
             }}
+            onPress={handleSubmit}
           >
             <Text
               className="text-black text-xl"
@@ -120,7 +138,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
                 fontFamily: "RalewaySemiBold",
               }}
             >
-              generate
+              {isSignedIn ? "generate" : "sign in to generate"}
             </Text>
           </TouchableOpacity>
         </View>
