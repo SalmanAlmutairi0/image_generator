@@ -6,5 +6,10 @@ export const Images = [
     {
         name: "3D",
         imagePath: require("../assets/images/imageStyles/3D.png"),
+    },
+    {
+        name: "Cyberpunk",
+        imagePath: require("../assets/images/imageStyles/Cyber.png"),
     }
+
 ];
