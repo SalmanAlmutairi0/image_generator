@@ -15,6 +15,7 @@ import FormGroup from "./formGroup";
 import { Images } from "@/constants/Images";
 import { useAuth } from "@clerk/clerk-expo";
 import { router } from "expo-router";
+import { SignIn, SignUp } from "@clerk/clerk-react";
 
 type Props = {
   showModal: boolean;
@@ -24,9 +25,13 @@ type Props = {
 export default function CreateModal({ showModal, setShowModal }: Props) {
   const { isSignedIn } = useAuth();
 
-  const [selectedImage, setSelectedImage] = useState<String>('');
+  const [selectedImage, setSelectedImage] = useState<String>("");
   const [selectedcolor, setSelectedColor] = useState<String>("");
   const [prompt, setPrompt] = useState<String>("");
+  const [formError, setFormError] = useState({
+    prompt: "",
+    selectedImage: "",
+  });
 
   const handleSlectedImage = (styleName: string) => {
     setSelectedImage(() => styleName);
@@ -36,9 +41,28 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
     setSelectedColor(() => color);
   };
 
+  const validateForm = () => {
+    const errors = {
+      prompt: prompt ? "" : "Please enter a prompt",
+      selectedImage: selectedImage ? "" : "Please select an image",
+    };
+
+    setFormError(errors);
+
+    return !errors.prompt && !errors.selectedImage;
+  };
   const handleSubmit = () => {
-    if (!isSignedIn) router.replace("./sign-in");
-    if (!selectedImage || !selectedcolor || !prompt) return;
+    // if (!isSignedIn){
+    //   console.log("not signed in");
+    //   return;
+    // };
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      console.log("form is not valid");
+      return;
+    }
 
     console.log("prompt: " + prompt);
     console.log("selected style: " + selectedImage);
@@ -61,7 +85,9 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
         <View className=" w-full gap-4">
           <FormGroup lable="Prompt">
             <TextInput
-              className="border border-gray-300 rounded-md p-2 text-white min-w-full"
+              className={`border  rounded-md p-2 text-white min-w-full ${
+                formError.prompt ? "border-red-500" : "border-gray-300"
+              }`}
               style={{ backgroundColor: Colors.primary }}
               placeholder="Describe the image"
               placeholderTextColor="#AAAAAA"
@@ -74,7 +100,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
 
           <FormGroup lable="image style">
             <FlatList
-              className="max-h-36"
+              className={`rounded-md p-2 ${formError.selectedImage ? "border border-red-500" : ""} `}
               horizontal
               showsHorizontalScrollIndicator={false}
               ItemSeparatorComponent={() => <View className="w-2" />}
@@ -89,7 +115,9 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
                     source={item.imagePath}
                     className={
                       `w-28 h-28 rounded-md` +
-                      (selectedImage === item.name ? " border-4 border-white" : "")
+                      (selectedImage === item.name
+                        ? " border-4 border-white"
+                        : "")
                     }
                   />
                   <Text className="text-white text-lg">{item.name}</Text>
@@ -100,7 +128,6 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
 
           <FormGroup lable="Color">
             <FlatList
-              className="max-h-28"
               showsHorizontalScrollIndicator={false}
               horizontal
               data={imageColors}
