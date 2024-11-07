@@ -5,9 +5,25 @@ import { Colors } from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
 import { Modal } from "react-native";
 import CreateModal from "@/components/createModal";
+import AuthModal from "@/components/authModal";
+import { useAuth } from "@clerk/clerk-expo";
+import { router } from "expo-router";
 
 export default function Home() {
-  const [showModal, setShowModal] = useState(false);
+  const { isSignedIn } = useAuth();
+  console.log(`The current path is: ${window?.location?.pathname}`);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleCreateModal = () => {
+    if (!isSignedIn) {
+      setShowAuthModal(true);
+    }else{
+      setShowCreateModal(true);
+    }
+
+  };
+
   return (
     <SafeAreaView
       className="flex-1  w-full h-full"
@@ -24,14 +40,21 @@ export default function Home() {
         <TouchableOpacity
           className="flex-row items-center rounded-full p-2 "
           style={{ backgroundColor: Colors.lightGreen }}
-          onPress={() => setShowModal((prev) => !prev)}
+          onPress={handleCreateModal}
         >
           <Feather name="plus" size={30} color="black" />
         </TouchableOpacity>
       </View>
 
-      <CreateModal showModal={showModal} setShowModal={setShowModal} />
-
+      {/* Modals */}
+      <AuthModal
+        showAuthModal={showAuthModal}
+        setShowAuthModal={setShowAuthModal}
+      />
+      <CreateModal
+        showCreateModal={showCreateModal}
+        setShowCreateModal={setShowCreateModal}
+      />
     </SafeAreaView>
   );
 }

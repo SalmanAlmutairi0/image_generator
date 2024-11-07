@@ -18,13 +18,11 @@ import { router } from "expo-router";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 
 type Props = {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showCreateModal: boolean;
+  setShowCreateModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function CreateModal({ showModal, setShowModal }: Props) {
-  const { isSignedIn } = useAuth();
-
+export default function CreateModal({ showCreateModal, setShowCreateModal }: Props) {
   const [selectedImage, setSelectedImage] = useState<String>("");
   const [selectedcolor, setSelectedColor] = useState<String>("");
   const [prompt, setPrompt] = useState<String>("");
@@ -52,11 +50,6 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
     return !errors.prompt && !errors.selectedImage;
   };
   const handleSubmit = () => {
-    // if (!isSignedIn){
-    //   console.log("not signed in");
-    //   return;
-    // };
-
     const isValid = validateForm();
 
     if (!isValid) {
@@ -70,26 +63,26 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
   };
 
   return (
-    <Modal animationType="slide" transparent visible={showModal}>
+    <Modal animationType="slide" transparent visible={showCreateModal}>
       <View className=" mt-auto bg-[#191919] w-full rounded-t-3xl p-4 shadow-2xl shadow-white">
         <View className="flex-row justify-end w-full">
           <Feather
             name="x"
             size={24}
             color="white"
-            onPress={() => setShowModal(() => false)}
+            onPress={() => setShowCreateModal(() => false)}
           />
         </View>
 
         {/* image Form */}
-        <View className=" w-full gap-4">
+        <View className=" w-full gap-4 mb-7">
           <FormGroup lable="Prompt">
             <TextInput
               className={`border  rounded-md p-2 text-white min-w-full ${
                 formError.prompt ? "border-red-500" : "border-gray-300"
               }`}
               style={{ backgroundColor: Colors.primary }}
-              placeholder="Describe the image"
+              placeholder="Enter a Simple Prompt"
               placeholderTextColor="#AAAAAA"
               multiline={true}
               numberOfLines={4}
@@ -165,7 +158,7 @@ export default function CreateModal({ showModal, setShowModal }: Props) {
                 fontFamily: "RalewaySemiBold",
               }}
             >
-              {isSignedIn ? "generate" : "sign in to generate"}
+              Generate
             </Text>
           </TouchableOpacity>
         </View>
