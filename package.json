@@ -17,7 +17,10 @@
   "dependencies": {
     "@clerk/clerk-expo": "^2.2.35",
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.0.2",
+    "@rneui/themed": "^4.0.0-rc.8",
+    "@supabase/supabase-js": "^2.46.1",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
     "expo-font": "~12.0.9",
@@ -30,6 +33,7 @@
     "expo-web-browser": "~13.0.3",
     "moti": "^0.29.0",
     "nativewind": "^4.1.21",
+    "openai": "^4.71.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
