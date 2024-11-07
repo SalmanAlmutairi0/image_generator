@@ -11,7 +11,6 @@ import { router } from "expo-router";
 
 export default function Home() {
   const { isSignedIn } = useAuth();
-  console.log(`The current path is: ${window?.location?.pathname}`);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
