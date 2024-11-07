@@ -41,7 +41,7 @@ export default function CreateModal({ showCreateModal, setShowCreateModal }: Pro
 
   const validateForm = () => {
     const errors = {
-      prompt: prompt ? "" : "Please enter a prompt",
+      prompt: prompt.trim() ? "" : "Please enter a prompt",
       selectedImage: selectedImage ? "" : "Please select an image",
     };
 
