@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Feather } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { ImageData } from "../api/images/index+api";
+import ImageItem from "@/components/imageItem";
 
 export default function Home() {
   const { isSignedIn } = useAuth();
@@ -29,24 +30,22 @@ export default function Home() {
     }
   };
 
-  const {
-    data: images,
-    isLoading,
-    error,
-  } = useQuery<ImageData[]>({
+  const fetchImages = async () => {
+    const response = await fetch("http://localhost:8081/api/images");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
+  const { data: images, isLoading } = useQuery<ImageData[]>({
     queryKey: ["images"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:8081/api/images");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    },
+    queryFn: fetchImages,
   });
 
   return (
     <SafeAreaView
-      className="flex-1  w-full h-full"
+      className="flex-1 w-full h-full"
       style={{ backgroundColor: Colors.primary }}
     >
       <View className="flex-row justify-between items-center px-4 ">
@@ -72,32 +71,22 @@ export default function Home() {
         </View>
       ) : null}
 
+      {!isLoading && images && images.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-white text-2xl">No images found</Text>
+        </View>
+      ) : null}
+
       {images && images.length > 0 ? (
         <FlatList
           data={images}
           showsVerticalScrollIndicator={false}
           numColumns={2}
-          className="flex-1 mt-4"
-          renderItem={({ item }) => (
-            <View className=" relative p-2 w-[50%] mb-4 ">
-              <Image
-                source={{ uri: item.image_url }}
-                className="w-full h-56 rounded-3xl"
-                style={{ resizeMode: "cover" }}
-                />
-
-              <TouchableOpacity className="absolute top-4 right-4 bg-[rgba(255,255,255,0.5)]   p-2 rounded-full">
-                <Feather name="bookmark" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
+          className="flex-1 mt-4 mb-10"
+          renderItem={({ item }) => <ImageItem image_url={item.image_url} />}
           keyExtractor={(item) => item.image_id.toString()}
         />
-      ) : (
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-white text-xl">No images available</Text>
-        </View>
-      )}
+      ) : null}
 
       {/* Modals */}
       <AuthModal

@@ -16,13 +16,18 @@ import { Images } from "@/constants/Images";
 import { useAuth } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { SignIn, SignUp } from "@clerk/clerk-react";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   showCreateModal: boolean;
   setShowCreateModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function CreateModal({ showCreateModal, setShowCreateModal }: Props) {
+export default function CreateModal({
+  showCreateModal,
+  setShowCreateModal,
+}: Props) {
+  const { userId } = useAuth();
   const [selectedImage, setSelectedImage] = useState<String>("");
   const [selectedcolor, setSelectedColor] = useState<String>("");
   const [prompt, setPrompt] = useState<String>("");
@@ -30,6 +35,7 @@ export default function CreateModal({ showCreateModal, setShowCreateModal }: Pro
     prompt: "",
     selectedImage: "",
   });
+
 
   const handleSlectedImage = (styleName: string) => {
     setSelectedImage(() => styleName);
@@ -49,12 +55,38 @@ export default function CreateModal({ showCreateModal, setShowCreateModal }: Pro
 
     return !errors.prompt && !errors.selectedImage;
   };
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     const isValid = validateForm();
 
     if (!isValid) {
       console.log("form is not valid");
       return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8081/api/images/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          prompt: prompt,
+          imageStyle: selectedImage,
+          imageColor: selectedcolor,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await res.json();
+
+      console.log(data);
+    } catch (e) {
+      console.error(e);
     }
 
     console.log("prompt: " + prompt);
@@ -93,7 +125,9 @@ export default function CreateModal({ showCreateModal, setShowCreateModal }: Pro
 
           <FormGroup lable="image style">
             <FlatList
-              className={`rounded-md p-2 ${formError.selectedImage ? "border border-red-500" : ""} `}
+              className={`rounded-md p-2 ${
+                formError.selectedImage ? "border border-red-500" : ""
+              } `}
               horizontal
               showsHorizontalScrollIndicator={false}
               ItemSeparatorComponent={() => <View className="w-2" />}
