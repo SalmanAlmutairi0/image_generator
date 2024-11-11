@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 const checkIfBookmarked = async (image_id: number, user_id: string) => {
   const { data, error } = await supabase
     .from("bookmarks")
-    .select()
+    .select("*")
     .eq("image_id", image_id)
     .eq("user_id", user_id);
 
@@ -29,18 +29,15 @@ const deleteBookmark = async (image_id: number, user_id: string) => {
 };
 
 const insertBookmark = async (image_id: number, user_id: string) => {
-  const { data, error } = await supabase
+  const { data: imageData, error: imageError } = await supabase
     .from("bookmarks")
-    .insert({
-      image_id: image_id,
-      user_id: user_id,
-    })
-    .select();
-  if (error) {
-    throw new Error(error.message);
+    .insert({ image_id: image_id, user_id: user_id });
+
+  if (imageError || !imageData) {
+    throw new Error("Image does not exist.");
   }
 
-  return data;
+  return imageData;
 };
 
 export async function POST(request: Request) {

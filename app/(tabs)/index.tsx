@@ -48,9 +48,9 @@ export default function Home() {
       className="flex-1 w-full h-full"
       style={{ backgroundColor: Colors.primary }}
     >
-      <View className="flex-row justify-between items-center px-4 ">
+      <View className="flex-row justify-between items-center border-b border-zinc-900  py-2 px-4 ">
         <Text
-          className="text-3xl font-bold text-white "
+          className="text-3xl font-bold text-white  "
           style={{ fontFamily: "RalewayMedium" }}
         >
           Cocode
@@ -82,8 +82,10 @@ export default function Home() {
           data={images}
           showsVerticalScrollIndicator={false}
           numColumns={2}
-          className="flex-1 mt-4 mb-10"
-          renderItem={({ item }) => <ImageItem image_url={item.image_url}  image_id={item.image_id}/>}
+          className="flex-1 mt-1 mb-10"
+          renderItem={({ item }) => (
+            <ImageItem image_url={item.image_url} image_id={item.image_id} />
+          )}
           keyExtractor={(item) => item.image_id.toString()}
         />
       ) : null}

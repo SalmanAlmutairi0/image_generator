@@ -3,15 +3,21 @@ import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { SignedIn, useAuth } from "@clerk/clerk-expo";
 
-export default function ImageItem({ image_url, image_id }: { image_url: string, image_id: number }) {
-  const {userId} = useAuth();
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
+export default function ImageItem({
+  image_url,
+  image_id,
+  bookmarked = false,
+}: {
+  image_url: string;
+  image_id: number;
+  bookmarked?: boolean;
+}) {
+  const { userId } = useAuth();
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
   const handleBookmark = async () => {
     setIsBookmarked((prev) => !prev);
     try {
-
       const res = await fetch("http://localhost:8081/api/bookmarks", {
         method: "POST",
         headers: {
@@ -26,8 +32,6 @@ export default function ImageItem({ image_url, image_id }: { image_url: string, 
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
-
-
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +48,11 @@ export default function ImageItem({ image_url, image_id }: { image_url: string, 
           className="absolute top-4 right-4 bg-[rgba(255,255,255,0.5)]   p-2 rounded-full"
           onPress={handleBookmark}
         >
-          <Feather name={isBookmarked ? "check" : "bookmark"} size={24} color="white" />
+          <Feather
+            name={isBookmarked ? "check" : "bookmark"}
+            size={24}
+            color="white"
+          />
         </TouchableOpacity>
       </SignedIn>
     </View>
