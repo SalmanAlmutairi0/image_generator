@@ -22,6 +22,8 @@ export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const handleCreateModal = () => {
     if (!isSignedIn) {
       setShowAuthModal(true);
@@ -84,7 +86,7 @@ export default function Home() {
           numColumns={2}
           className="flex-1 mt-1 mb-10"
           renderItem={({ item }) => (
-            <ImageItem image_url={item.image_url} image_id={item.image_id} />
+            <ImageItem image_url={item.image_url} image_id={item.image_id} loading={loading} setLoading={setLoading}/>
           )}
           keyExtractor={(item) => item.image_id.toString()}
         />

@@ -19,7 +19,8 @@ const deleteBookmark = async (image_id: number, user_id: string) => {
     .from("bookmarks")
     .delete()
     .eq("image_id", image_id)
-    .eq("user_id", user_id);
+    .eq("user_id", user_id)
+    .select("*");
 
   if (error) {
     throw new Error(error.message);
@@ -43,6 +44,8 @@ const insertBookmark = async (image_id: number, user_id: string) => {
 export async function POST(request: Request) {
   const { user_id, image_id }: { user_id: string; image_id: number } =
     await request.json();
+
+    console.log(user_id, image_id);
 
   try {
     const existingBookmark = await checkIfBookmarked(image_id, user_id);

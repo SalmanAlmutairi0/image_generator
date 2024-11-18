@@ -1,9 +1,9 @@
 import { supabase } from "@/lib/supabase";
 
 export type bookmarkedImage = {
-    image_id: number;
-    image_url: string;
-}
+  image_id: number;
+  image_url: string;
+};
 export async function GET(request: Request, { user_id }: { user_id: string }) {
   if (!user_id)
     return Response.json({ error: "You must be logged in" }, { status: 401 });
@@ -11,7 +11,7 @@ export async function GET(request: Request, { user_id }: { user_id: string }) {
   try {
     const { data, error } = await supabase
       .from("bookmarks")
-      .select("id,images(image_url)")
+      .select("image_id, images(image_url)")
       .eq("user_id", user_id);
 
     if (error) {
@@ -22,18 +22,17 @@ export async function GET(request: Request, { user_id }: { user_id: string }) {
       return Response.json({ error: "No bookmarks found" }, { status: 404 });
     }
 
-    const images: bookmarkedImage[] = data.map(
-      (image) =>{
+    const images = data.map((item) => {
+      const imagePath = item.images?.image_url;
+
+      const publicUrl = supabase.storage.from("images").getPublicUrl(imagePath)
+        ?.data?.publicUrl;
+
         return {
-          image_id: image.id,
-          image_url:
-            supabase.storage.from("images").getPublicUrl(image.images.image_url)?.data
-              ?.publicUrl ?? null,
-        };
-      }
-        
-    );
-    
+          image_id: item.image_id,
+          image_url: publicUrl
+        }
+    });
 
     return Response.json(images, { status: 200 });
   } catch (error) {
