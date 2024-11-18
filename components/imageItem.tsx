@@ -20,7 +20,6 @@ export default function ImageItem({
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
   const handleBookmark = async () => {
-    setIsBookmarked((prev) => !prev);
     setLoading(() => true);
     try {
       const res = await fetch("http://localhost:8081/api/bookmarks", {
@@ -33,7 +32,8 @@ export default function ImageItem({
           user_id: userId,
         }),
       });
-
+      
+      setIsBookmarked((prev) => !prev);
       // if (!res.ok) {
       //   throw new Error("Network response was not ok");
       // }

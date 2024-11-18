@@ -21,18 +21,17 @@ export default function Bookmarks() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     const refetchImages = async () => {
       if (!userId) {
         setShowAuthModal(() => true);
         return null;
       }
-      
+
       await refetch();
-    }
-    refetchImages()
-  },[loading])
+    };
+    refetchImages();
+  }, [loading, userId]);
   const fetchImages = async () => {
     if (!userId) {
       setShowAuthModal(() => true);
@@ -72,27 +71,10 @@ export default function Bookmarks() {
         Bookmarks
       </Text>
 
-      {/* {!userId ? (
-        <View className="flex-1 items-center justify-center">
-          <AuthModal
-            showAuthModal={showAuthModal}
-            setShowAuthModal={setShowAuthModal}
-            closeable={false}
-          />
-        </View>
-      ) : null} */}
-      <AuthModal
-        showAuthModal={showAuthModal}
-        setShowAuthModal={setShowAuthModal}
-        closeable={false}
-      />
-
-      {isLoading || (loading && userId) ? (
-        <Loading />
-      ) : null}
+      {isLoading || (loading && userId) ? <Loading /> : null}
 
       {!isLoading && images && images.length === 0 ? (
-        <View className="flex-1 items-center justify-center">
+        <View className="flex-1 items-center justify-center ">
           <Text className="text-white text-2xl">No images found</Text>
         </View>
       ) : null}
@@ -125,6 +107,12 @@ export default function Bookmarks() {
           }
         />
       ) : null}
+
+      <AuthModal
+        showAuthModal={showAuthModal}
+        setShowAuthModal={setShowAuthModal}
+        closeable={false}
+      />
     </SafeAreaView>
   );
 }
